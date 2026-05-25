@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tým — SK Meteor Kostelní Hlavno</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue: #1a6bb5;
+    --blue-dark: #0d3d6e;
+    --blue-mid: #1558a0;
+    --blue-light: #e6f1fb;
+    --navy: #0d1b2e;
+    --navy-mid: #132540;
+    --gold: #f0a500;
+    --gold-light: #fff8e6;
+    --white: #ffffff;
+    --gray-50: #f7f8fa;
+    --gray-100: #f0f2f5;
+    --gray-200: #e0e4ea;
+    --gray-400: #8a94a6;
+    --gray-600: #556070;
+    --gray-800: #2a3040;
+    --green: #22a05a;
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 14px;
+    --radius-xl: 20px;
+    --shadow-sm: 0 1px 4px rgba(13,27,46,0.08);
+    --shadow-md: 0 4px 20px rgba(13,27,46,0.12);
+    --shadow-lg: 0 12px 40px rgba(13,27,46,0.18);
+  }
+
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Barlow', sans-serif; color: var(--gray-800); background: var(--white); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+  /* ─── NAV ─── */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(13,27,46,0.96); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 0 5%; display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .nav-brand { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+  .nav-crest { width: 38px; height: 38px; border-radius: 50%; background: var(--blue); display: flex; align-items: center; justify-content: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 0.9rem; color: var(--white); flex-shrink: 0; border: 2px solid rgba(255,255,255,0.15); }
+  .nav-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1rem; color: var(--white); line-height: 1.1; }
+  .nav-name span { display: block; font-size: 0.7rem; font-weight: 400; color: rgba(255,255,255,0.45); letter-spacing: 0.06em; text-transform: uppercase; }
+  .nav-links { display: flex; align-items: center; gap: 1.75rem; list-style: none; }
+  .nav-links a { text-decoration: none; font-size: 0.875rem; font-weight: 500; color: rgba(255,255,255,0.6); transition: color 0.2s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--white); }
+  .nav-cta { background: var(--gold); color: var(--navy) !important; padding: 0.5rem 1.1rem; border-radius: var(--radius-md); font-weight: 600 !important; font-size: 0.825rem !important; transition: background 0.2s !important; }
+  .nav-cta:hover { background: #e09800 !important; }
+  .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+  .nav-hamburger span { width: 22px; height: 2px; background: var(--white); border-radius: 2px; display: block; }
+
+  /* ─── PAGE HEADER ─── */
+  .page-header { background: var(--navy); padding: 110px 5% 70px; position: relative; overflow: hidden; }
+  .page-header::before { content: ''; position: absolute; top: -100px; right: -100px; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(26,107,181,0.25) 0%, transparent 70%); }
+  .page-header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: rgba(255,255,255,0.06); }
+  .page-header-inner { position: relative; z-index: 2; }
+  .page-eyebrow { font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 0.5rem; }
+  .page-header h1 { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(2.5rem, 5vw, 4rem); color: var(--white); line-height: 1.0; letter-spacing: -0.01em; font-weight: 800; text-transform: uppercase; margin-bottom: 0.85rem; }
+  .page-header p { font-size: 1rem; color: rgba(255,255,255,0.5); max-width: 520px; }
+
+  /* ─── TABS ─── */
+  .tabs-bar { background: var(--white); border-bottom: 2px solid var(--gray-100); position: sticky; top: 64px; z-index: 90; padding: 0 5%; }
+  .tabs-inner { display: flex; gap: 0; }
+  .tab-btn { padding: 1rem 1.5rem; font-family: 'Barlow Condensed', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.06em; border: none; background: transparent; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: color 0.2s, border-color 0.2s; font-family: 'Barlow Condensed', sans-serif; }
+  .tab-btn:hover { color: var(--blue); }
+  .tab-btn.active { color: var(--blue); border-bottom-color: var(--blue); }
+
+  /* ─── SECTIONS ─── */
+  .section { padding: 70px 5%; }
+  .section-alt { background: var(--gray-50); }
+  .section-dark { background: var(--navy); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  .section-eyebrow { font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 0.5rem; }
+  .section-eyebrow.gold { color: var(--gold); }
+  .section-title { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(1.8rem, 3vw, 2.8rem); color: var(--gray-800); line-height: 1.05; letter-spacing: -0.01em; margin-bottom: 1rem; font-weight: 800; text-transform: uppercase; }
+  .section-title.light { color: var(--white); }
+  .section-header { margin-bottom: 2.5rem; }
+
+  /* ─── REALIZAČNÍ TÝM ─── */
+  .staff-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-bottom: 3rem; }
+  .staff-card { background: var(--navy); border-radius: var(--radius-lg); padding: 1.5rem; display: flex; gap: 1rem; align-items: center; }
+  .staff-photo { width: 52px; height: 52px; border-radius: 50%; background: rgba(26,107,181,0.3); border: 2px solid rgba(26,107,181,0.4); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+  .staff-info h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 700; color: var(--white); text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 0.15rem; }
+  .staff-role { font-size: 0.775rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.25rem; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; }
+  .staff-contact { font-size: 0.825rem; color: var(--blue); text-decoration: none; transition: color 0.2s; }
+  .staff-contact:hover { color: #7ab8f5; }
+
+  /* ─── SOUPISKA ─── */
+  .players-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+  .player-card { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius-lg); overflow: hidden; transition: box-shadow 0.25s, transform 0.25s; }
+  .player-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+  .player-card.captain { border-color: var(--gold); border-width: 2px; }
+  .player-photo { height: 140px; background: linear-gradient(160deg, var(--blue-light) 0%, #c8dff5 100%); display: flex; align-items: center; justify-content: center; position: relative; }
+  .player-number { position: absolute; top: 10px; left: 10px; font-family: 'Barlow Condensed', sans-serif; font-size: 1.4rem; font-weight: 800; color: var(--blue); line-height: 1; }
+  .player-card.captain .player-number { color: var(--gold); }
+  .captain-badge { position: absolute; top: 10px; right: 10px; background: var(--gold); color: var(--navy); font-size: 0.6rem; font-weight: 700; font-family: 'Barlow Condensed', sans-serif; padding: 2px 6px; border-radius: 3px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .player-avatar { font-size: 3rem; opacity: 0.3; }
+  .player-body { padding: 0.85rem; }
+  .player-pos { font-family: 'Barlow Condensed', sans-serif; font-size: 0.65rem; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.2rem; }
+  .player-card.captain .player-pos { color: var(--gold); }
+  .player-name { font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 700; color: var(--gray-800); text-transform: uppercase; letter-spacing: 0.01em; line-height: 1.2; }
+
+  /* ─── STATISTIKY ─── */
+  .stats-bar { background: var(--blue-dark); border-radius: var(--radius-xl); padding: 2rem; display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; margin-top: 3rem; }
+  .stats-bar-item { text-align: center; padding: 1rem; }
+  .stats-bar-num { font-family: 'Barlow Condensed', sans-serif; font-size: 2.2rem; font-weight: 800; color: var(--white); line-height: 1; margin-bottom: 0.3rem; }
+  .stats-bar-num span { color: var(--gold); }
+  .stats-bar-label { font-size: 0.725rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.06em; }
+
+  /* ─── MLÁDEŽ KATEGORIE ─── */
+  .youth-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .youth-card { border-radius: var(--radius-xl); overflow: hidden; border: 1px solid var(--gray-200); }
+  .youth-header { background: var(--navy); padding: 1.5rem 1.75rem; display: flex; align-items: center; justify-content: space-between; }
+  .youth-header-left h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 1.4rem; font-weight: 800; color: var(--white); text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 0.2rem; }
+  .youth-age { font-size: 0.775rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.08em; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; }
+  .youth-icon { width: 44px; height: 44px; border-radius: 50%; background: rgba(26,107,181,0.3); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+  .youth-body { padding: 1.5rem 1.75rem; background: var(--white); }
+  .youth-info-row { display: flex; gap: 0.6rem; align-items: flex-start; margin-bottom: 0.85rem; }
+  .youth-info-icon { width: 28px; height: 28px; border-radius: var(--radius-sm); background: var(--blue-light); display: flex; align-items: center; justify-content: center; font-size: 0.85rem; flex-shrink: 0; margin-top: 1px; }
+  .youth-info-text label { font-size: 0.7rem; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.06em; display: block; margin-bottom: 0.1rem; }
+  .youth-info-text span { font-size: 0.875rem; color: var(--gray-800); font-weight: 500; }
+  .youth-players { margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid var(--gray-100); }
+  .youth-players-label { font-size: 0.7rem; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.75rem; }
+  .youth-players-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+  .youth-player { background: var(--gray-50); border-radius: var(--radius-sm); padding: 0.4rem 0.6rem; font-size: 0.775rem; color: var(--gray-600); }
+  .youth-cta { margin-top: 1.25rem; }
+  .btn-blue-sm { display: inline-block; background: var(--blue); color: var(--white); padding: 0.6rem 1.25rem; border-radius: var(--radius-md); font-size: 0.825rem; font-weight: 600; text-decoration: none; transition: background 0.2s; border: none; cursor: pointer; font-family: 'Barlow', sans-serif; }
+  .btn-blue-sm:hover { background: var(--blue-mid); }
+
+  /* ─── VEDENÍ ─── */
+  .vedeni-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+  .vedeni-card { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: 1.25rem; text-align: center; transition: box-shadow 0.2s; }
+  .vedeni-card:hover { box-shadow: var(--shadow-md); }
+  .vedeni-photo { width: 56px; height: 56px; border-radius: 50%; background: var(--blue-light); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin: 0 auto 0.85rem; }
+  .vedeni-role { font-size: 0.7rem; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.3rem; font-family: 'Barlow Condensed', sans-serif; }
+  .vedeni-name { font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 700; color: var(--gray-800); text-transform: uppercase; margin-bottom: 0.5rem; }
+  .vedeni-contact { font-size: 0.8rem; color: var(--blue); text-decoration: none; display: block; transition: color 0.2s; }
+  .vedeni-contact:hover { color: var(--blue-dark); }
+
+  /* ─── NÁBOR CTA ─── */
+  .nabor-cta { background: var(--navy); border-radius: var(--radius-xl); padding: 2.5rem; display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: center; }
+  .nabor-cta h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--white); text-transform: uppercase; letter-spacing: 0.01em; margin-bottom: 0.5rem; }
+  .nabor-cta p { font-size: 0.9rem; color: rgba(255,255,255,0.5); }
+  .nabor-btns { display: flex; gap: 0.75rem; flex-shrink: 0; flex-wrap: wrap; }
+  .btn-gold { display: inline-block; background: var(--gold); color: var(--navy); padding: 0.8rem 1.75rem; border-radius: var(--radius-md); font-size: 0.9rem; font-weight: 600; text-decoration: none; transition: background 0.2s, transform 0.15s; border: none; cursor: pointer; font-family: 'Barlow', sans-serif; box-shadow: 0 4px 16px rgba(240,165,0,0.3); }
+  .btn-gold:hover { background: #e09800; transform: translateY(-2px); }
+  .btn-outline-light { display: inline-block; background: transparent; color: rgba(255,255,255,0.7); padding: 0.8rem 1.75rem; border-radius: var(--radius-md); font-size: 0.9rem; font-weight: 500; text-decoration: none; border: 1px solid rgba(255,255,255,0.2); transition: border-color 0.2s, color 0.2s; }
+  .btn-outline-light:hover { border-color: rgba(255,255,255,0.5); color: var(--white); }
+
+  /* ─── FOOTER ─── */
+  footer { background: #070f1a; padding: 3rem 5% 1.5rem; }
+  .footer-inner { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 2.5rem; padding-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .footer-brand-name { font-family: 'Barlow Condensed', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--white); letter-spacing: 0.02em; text-transform: uppercase; margin-bottom: 0.6rem; }
+  .footer-brand p { font-size: 0.825rem; color: rgba(255,255,255,0.35); line-height: 1.7; max-width: 240px; }
+  .footer-social { display: flex; gap: 0.6rem; margin-top: 1.25rem; }
+  .footer-social a { width: 32px; height: 32px; border-radius: var(--radius-sm); background: rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.4); text-decoration: none; font-size: 0.75rem; font-weight: 700; font-family: 'Barlow Condensed', sans-serif; transition: background 0.2s, color 0.2s; }
+  .footer-social a:hover { background: var(--blue); color: var(--white); }
+  .footer-col h4 { font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; font-weight: 700; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; }
+  .footer-col a { display: block; font-size: 0.85rem; color: rgba(255,255,255,0.5); text-decoration: none; margin-bottom: 0.5rem; transition: color 0.2s; }
+  .footer-col a:hover { color: var(--white); }
+  .footer-bottom { display: flex; justify-content: space-between; align-items: center; font-size: 0.775rem; color: rgba(255,255,255,0.2); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 1024px) {
+    .players-grid { grid-template-columns: repeat(3, 1fr); }
+    .vedeni-grid { grid-template-columns: repeat(2, 1fr); }
+    .footer-inner { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 1.25rem; }
+    .nav-links { display: none; }
+    .nav-hamburger { display: flex; }
+    .page-header { padding: 90px 1.25rem 50px; }
+    .section { padding: 50px 1.25rem; }
+    .staff-grid { grid-template-columns: 1fr; }
+    .players-grid { grid-template-columns: repeat(2, 1fr); }
+    .stats-bar { grid-template-columns: repeat(3, 1fr); }
+    .youth-grid { grid-template-columns: 1fr; }
+    .vedeni-grid { grid-template-columns: repeat(2, 1fr); }
+    .nabor-cta { grid-template-columns: 1fr; }
+    .nabor-btns { justify-content: flex-start; }
+    .footer-inner { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+  }
+
+  @media (max-width: 480px) {
+    .players-grid { grid-template-columns: repeat(2, 1fr); }
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    .footer-inner { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="meteor-homepage.html" class="nav-brand">
+    <div class="nav-crest">SKM</div>
+    <div class="nav-name">SK Meteor<span>Kostelní Hlavno</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="meteor-tym.html" class="active">Tým</a></li>
+    <li><a href="meteor-zapasy.html">Zápasy</a></li>
+    <li><a href="meteor-klub.html">Klub</a></li>
+    <li><a href="meteor-kontakt.html">Kontakt & Merch</a></li>
+    <li><a href="meteor-kontakt.html" class="nav-cta">Přijď hrát s námi</a></li>
+  </ul>
+  <div class="nav-hamburger"><span></span><span></span><span></span></div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-eyebrow">Sezóna 2024/2025</div>
+    <h1>Naši hráči</h1>
+    <p>Poznejte lidi, kteří každý víkend oblékají dres SK Meteor Kostelní Hlavno s hrdostí.</p>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-bar">
+  <div class="tabs-inner">
+    <button class="tab-btn active" onclick="switchTab('atym')">A tým — Muži</button>
+    <button class="tab-btn" onclick="switchTab('starsi')">Starší přípravka</button>
+    <button class="tab-btn" onclick="switchTab('mladsi')">Mladší přípravka</button>
+    <button class="tab-btn" onclick="switchTab('vedeni')">Vedení klubu</button>
+  </div>
+</div>
+
+<!-- A TÝM -->
+<div class="tab-content active" id="tab-atym">
+
+  <section class="section">
+    <div class="section-header">
+      <div class="section-eyebrow">Realizační tým</div>
+      <h2 class="section-title">Trenéři a vedení A týmu</h2>
+    </div>
+    <div class="staff-grid">
+      <div class="staff-card">
+        <div class="staff-photo">👤</div>
+        <div class="staff-info">
+          <div class="staff-role">Hlavní trenér</div>
+          <h3>[Jméno trenéra]</h3>
+          <a href="tel:+420000000000" class="staff-contact">+420 000 000 000</a>
+        </div>
+      </div>
+      <div class="staff-card">
+        <div class="staff-photo">👤</div>
+        <div class="staff-info">
+          <div class="staff-role">Asistent trenéra</div>
+          <h3>[Jméno asistenta]</h3>
+          <a href="tel:+420000000000" class="staff-contact">+420 000 000 000</a>
+        </div>
+      </div>
+      <div class="staff-card">
+        <div class="staff-photo">👤</div>
+        <div class="staff-info">
+          <div class="staff-role">Vedoucí mužstva</div>
+          <h3>[Jméno vedoucího]</h3>
+          <a href="tel:+420000000000" class="staff-contact">+420 000 000 000</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <div class="section-eyebrow">Soupiska</div>
+      <h2 class="section-title">Hráči A týmu</h2>
+    </div>
+
+    <!-- BRANKÁŘI -->
+    <div style="margin-bottom:2rem;">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.75rem;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:2px solid var(--gray-100);">Brankáři</div>
+      <div class="players-grid">
+        <div class="player-card">
+          <div class="player-photo"><div class="player-number">1</div><div class="player-avatar">🧤</div></div>
+          <div class="player-body"><div class="player-pos">Brankář</div><div class="player-name">[Jméno hráče]</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OBRÁNCI -->
+    <div style="margin-bottom:2rem;">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.75rem;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:2px solid var(--gray-100);">Obránci</div>
+      <div class="players-grid">
+        <div class="player-card">
+          <div class="player-photo"><div class="player-number">2</div><div class="player-avatar">⚽</div></div>
+          <div class="player-body"><div class="player-pos">Obránce</div><div class="player-name">[Jméno hráče]</div></div>
+        </div>
+        <div class="player-card">
+          <div class="player-photo"><div class="player-number">3</div><div class="player-avatar">⚽</div></div>
+          <div class="player-body"><div class="player-pos">Obránce</div><div class="player-name">[Jméno hráče]</div></div>
+        </div>
+        <div class="player-card">
+          <div class="player-photo"><div class="player-number">4</div><div class="player-avatar">⚽</div></div>
+          <div class="player-body"><div class="player-pos">Obránce</div><div class="player-name">[Jméno hráče]</div></div>
+        </div>
+        <div class="player-card">
+          <div class="player-photo"><div class="player-number">5</div><div class="player-avatar">⚽</div></div>
+          <div class="player-body"><div class="player-pos">Obránce</div><div class="player-name">[Jméno hráče]</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ZÁLOŽNÍCI -->
+    <div style="margin-bottom:2rem;">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.75rem;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:2px solid var(--gray-100);">Záložníci</div>
+      <div class="players-grid">
+        <div class="player-card captain">
+          <div class="player-photo"><div class="player-number">6</div><div class="captain-badge">Kapitán</div><div class="player-avatar">⚽</div></div>
+          <div class="player-body"><div class="player-pos">Záložník</div><div class="player-name">[Jméno kapitána]</div></div>
+        </div>
+        <div class="player-card">
+          <div class="player-photo"><div class="player-number">7</div><div class="player-avatar">⚽</div></div>
+          <div class="player-body"><div class="player-pos">Záložník</div><div class="player-name">[Jméno hráče]</div></div>
+        </div>
+        <div class="player-card">
+          <div class="player-photo"><div class="player-number">8</div><div class="player-avatar">⚽</div></div>
+          <div class="player-body"><div class="player-pos">Záložník</div><div class="player-name">[Jméno hráče]</div></div>
+        </div>
+        <div class="player-card">
+          <div class="player-photo"><div class="player-number">10</div><div class="player-avatar">⚽</div></div>
+          <div class="player-body"><div class="player-pos">Záložník</div><div class="player-name">[Jméno hráče]</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ÚTOČNÍCI -->
+    <div style="margin-bottom:2rem;">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.75rem;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:2px solid var(--gray-100);">Útočníci</div>
+      <div class="players-grid">
+        <div class="player-card">
+          <div class="player-photo"><div class="player-number">9</div><div class="player-avatar">⚽</div></div>
+          <div class="player-body"><div class="player-pos">Útočník</div><div class="player-name">[Jméno hráče]</div></div>
+        </div>
+        <div class="player-card">
+          <div class="player-photo"><div class="player-number">11</div><div class="player-avatar">⚽</div></div>
+          <div class="player-body"><div class="player-pos">Útočník</div><div class="player-name">[Jméno hráče]</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATISTIKY -->
+    <div class="stats-bar">
+      <div class="stats-bar-item"><div class="stats-bar-num">22<span></span></div><div class="stats-bar-label">Odehráno zápasů</div></div>
+      <div class="stats-bar-item"><div class="stats-bar-num">12<span></span></div><div class="stats-bar-label">Výhry</div></div>
+      <div class="stats-bar-item"><div class="stats-bar-num">44<span></span></div><div class="stats-bar-label">Vstřelených gólů</div></div>
+      <div class="stats-bar-item"><div class="stats-bar-num">[Jméno]<span></span></div><div class="stats-bar-label">Nejlepší střelec</div></div>
+      <div class="stats-bar-item"><div class="stats-bar-num">3.<span></span></div><div class="stats-bar-label">Místo v tabulce</div></div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="nabor-cta">
+      <div>
+        <h3>Hledáme posily do mužstva</h3>
+        <p>Hrajete fotbal a chcete se zapojit? Přijďte na trénink — první zkouška je zdarma.</p>
+      </div>
+      <div class="nabor-btns">
+        <a href="meteor-kontakt.html" class="btn-gold">Přihlásit se →</a>
+        <a href="tel:+420000000000" class="btn-outline-light">Zavolat trenérovi</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- STARŠÍ PŘÍPRAVKA -->
+<div class="tab-content" id="tab-starsi">
+  <section class="section">
+    <div class="youth-grid">
+      <div class="youth-card">
+        <div class="youth-header">
+          <div class="youth-header-left">
+            <h3>Starší přípravka</h3>
+            <div class="youth-age">Věková kategorie U9–U11</div>
+          </div>
+          <div class="youth-icon">⚽</div>
+        </div>
+        <div class="youth-body">
+          <div class="youth-info-row">
+            <div class="youth-info-icon">👤</div>
+            <div class="youth-info-text"><label>Trenér</label><span>[Jméno trenéra přípravky]</span></div>
+          </div>
+          <div class="youth-info-row">
+            <div class="youth-info-icon">📞</div>
+            <div class="youth-info-text"><label>Kontakt pro rodiče</label><span>[telefon]</span></div>
+          </div>
+          <div class="youth-info-row">
+            <div class="youth-info-icon">🕐</div>
+            <div class="youth-info-text"><label>Tréninky</label><span>[dny a časy — doplňte]</span></div>
+          </div>
+          <div class="youth-info-row">
+            <div class="youth-info-icon">📍</div>
+            <div class="youth-info-text"><label>Místo</label><span>Hřiště SK Meteor, Kostelní Hlavno</span></div>
+          </div>
+          <div class="youth-players">
+            <div class="youth-players-label">Hráči (doplňte jména)</div>
+            <div class="youth-players-grid">
+              <div class="youth-player">[Jméno]</div>
+              <div class="youth-player">[Jméno]</div>
+              <div class="youth-player">[Jméno]</div>
+              <div class="youth-player">[Jméno]</div>
+              <div class="youth-player">[Jméno]</div>
+              <div class="youth-player">[Jméno]</div>
+            </div>
+          </div>
+          <div class="youth-cta">
+            <a href="meteor-kontakt.html" class="btn-blue-sm">Přihlásit dítě →</a>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--gray-50);border-radius:var(--radius-xl);padding:2rem;display:flex;flex-direction:column;gap:1rem;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.75rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.5rem;">O přípravce</div>
+        <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.6rem;font-weight:800;color:var(--gray-800);text-transform:uppercase;line-height:1.1;">Fotbal baví od malička</h3>
+        <p style="font-size:0.9rem;color:var(--gray-600);line-height:1.75;">Starší přípravka je určena pro děti ve věku [X–X let]. Klademe důraz na radost ze hry, technický rozvoj a fair play. Soutěžní výsledky jsou na druhém místě — na prvním je láska k fotbalu.</p>
+        <p style="font-size:0.9rem;color:var(--gray-600);line-height:1.75;">Tréninky probíhají [X]× týdně na hřišti v Kostelním Hlavně. Vybavení zajistí klub, rodiče přivedou jen nadšené dítě.</p>
+        <div style="background:var(--blue-light);border-radius:var(--radius-md);padding:1rem;border-left:3px solid var(--blue);">
+          <div style="font-size:0.85rem;font-weight:600;color:var(--blue-dark);">První trénink zdarma</div>
+          <div style="font-size:0.825rem;color:var(--gray-600);margin-top:0.2rem;">Přijďte se podívat bez závazku — zavolejte trenérovi nebo napište přes kontaktní formulář.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- MLADŠÍ PŘÍPRAVKA -->
+<div class="tab-content" id="tab-mladsi">
+  <section class="section">
+    <div class="youth-grid">
+      <div class="youth-card">
+        <div class="youth-header">
+          <div class="youth-header-left">
+            <h3>Mladší přípravka</h3>
+            <div class="youth-age">Věková kategorie U6–U8</div>
+          </div>
+          <div class="youth-icon">⚽</div>
+        </div>
+        <div class="youth-body">
+          <div class="youth-info-row">
+            <div class="youth-info-icon">👤</div>
+            <div class="youth-info-text"><label>Trenér</label><span>[Jméno trenéra přípravky]</span></div>
+          </div>
+          <div class="youth-info-row">
+            <div class="youth-info-icon">📞</div>
+            <div class="youth-info-text"><label>Kontakt pro rodiče</label><span>[telefon]</span></div>
+          </div>
+          <div class="youth-info-row">
+            <div class="youth-info-icon">🕐</div>
+            <div class="youth-info-text"><label>Tréninky</label><span>[dny a časy — doplňte]</span></div>
+          </div>
+          <div class="youth-info-row">
+            <div class="youth-info-icon">📍</div>
+            <div class="youth-info-text"><label>Místo</label><span>Hřiště SK Meteor, Kostelní Hlavno</span></div>
+          </div>
+          <div class="youth-players">
+            <div class="youth-players-label">Hráči (doplňte jména)</div>
+            <div class="youth-players-grid">
+              <div class="youth-player">[Jméno]</div>
+              <div class="youth-player">[Jméno]</div>
+              <div class="youth-player">[Jméno]</div>
+              <div class="youth-player">[Jméno]</div>
+              <div class="youth-player">[Jméno]</div>
+              <div class="youth-player">[Jméno]</div>
+            </div>
+          </div>
+          <div class="youth-cta">
+            <a href="meteor-kontakt.html" class="btn-blue-sm">Přihlásit dítě →</a>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--gray-50);border-radius:var(--radius-xl);padding:2rem;display:flex;flex-direction:column;gap:1rem;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.75rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.5rem;">O přípravce</div>
+        <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.6rem;font-weight:800;color:var(--gray-800);text-transform:uppercase;line-height:1.1;">Nejmenší, ale největší srdce</h3>
+        <p style="font-size:0.9rem;color:var(--gray-600);line-height:1.75;">Mladší přípravka je pro naše nejmenší fotbalisty ve věku [X–X let]. Hrajeme si, běháme a učíme se základy fotbalu — v přátelské a bezpečné atmosféře.</p>
+        <p style="font-size:0.9rem;color:var(--gray-600);line-height:1.75;">Žádné přijímací zkoušky, žádný tlak na výsledky. Stačí mít rád míč a chuť si hrát.</p>
+        <div style="background:var(--gold-light);border-radius:var(--radius-md);padding:1rem;border-left:3px solid var(--gold);">
+          <div style="font-size:0.85rem;font-weight:600;color:#6b4800;">Přijďte se podívat</div>
+          <div style="font-size:0.825rem;color:var(--gray-600);margin-top:0.2rem;">Rodiče jsou vítáni na každém tréninku. Zavolejte trenérovi nebo napište — rádi vás přivítáme.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- VEDENÍ -->
+<div class="tab-content" id="tab-vedeni">
+  <section class="section">
+    <div class="section-header">
+      <div class="section-eyebrow">Vedení klubu</div>
+      <h2 class="section-title">Kdo klub řídí</h2>
+    </div>
+    <div class="vedeni-grid">
+      <div class="vedeni-card">
+        <div class="vedeni-photo">👤</div>
+        <div class="vedeni-role">Předseda</div>
+        <div class="vedeni-name">[Jméno předsedy]</div>
+        <a href="tel:+420000000000" class="vedeni-contact">+420 000 000 000</a>
+      </div>
+      <div class="vedeni-card">
+        <div class="vedeni-photo">👤</div>
+        <div class="vedeni-role">Místopředseda</div>
+        <div class="vedeni-name">[Jméno]</div>
+        <a href="tel:+420000000000" class="vedeni-contact">+420 000 000 000</a>
+      </div>
+      <div class="vedeni-card">
+        <div class="vedeni-photo">👤</div>
+        <div class="vedeni-role">Hospodář</div>
+        <div class="vedeni-name">[Jméno]</div>
+        <a href="tel:+420000000000" class="vedeni-contact">+420 000 000 000</a>
+      </div>
+      <div class="vedeni-card">
+        <div class="vedeni-photo">👤</div>
+        <div class="vedeni-role">Správce hřiště</div>
+        <div class="vedeni-name">[Jméno]</div>
+        <a href="tel:+420000000000" class="vedeni-contact">+420 000 000 000</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-brand-name">SK Meteor Kostelní Hlavno</div>
+      <p>Fotbalový klub hrající Mladoboleslavský okresní přebor. Muži a mládež.</p>
+      <div class="footer-social"><a href="#">FB</a></div>
+    </div>
+    <div class="footer-col">
+      <h4>Navigace</h4>
+      <a href="meteor-tym.html">Tým</a>
+      <a href="meteor-zapasy.html">Zápasy</a>
+      <a href="meteor-klub.html">Klub</a>
+      <a href="meteor-kontakt.html">Kontakt & Merch</a>
+    </div>
+    <div class="footer-col">
+      <h4>Tým</h4>
+      <a href="#" onclick="switchTab('atym');return false;">A tým — Muži</a>
+      <a href="#" onclick="switchTab('starsi');return false;">Starší přípravka</a>
+      <a href="#" onclick="switchTab('mladsi');return false;">Mladší přípravka</a>
+      <a href="#" onclick="switchTab('vedeni');return false;">Vedení klubu</a>
+    </div>
+    <div class="footer-col">
+      <h4>Kontakt</h4>
+      <a href="#">[Telefon předsedy]</a>
+      <a href="#">Kostelní Hlavno</a>
+      <a href="meteor-kontakt.html#nabor">Nábor hráčů</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 SK Meteor Kostelní Hlavno</span>
+    <span>Web vytvořen s láskou k fotbalu</span>
+  </div>
+</footer>
+
+<script>
+  function switchTab(id) {
+    document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+      btn.classList.remove('active');
+    });
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+    const ids = ['atym', 'starsi', 'mladsi', 'vedeni'];
+    const idx = ids.indexOf(id);
+    if (idx !== -1) document.querySelectorAll('.tab-btn')[idx].classList.add('active');
+
+    const content = document.getElementById('tab-' + id);
+    if (content) {
+      content.classList.add('active');
+      window.scrollTo({ top: document.querySelector('.tabs-bar').offsetTop - 64, behavior: 'smooth' });
+    }
+  }
+</script>
+
+</body>
+</html>
