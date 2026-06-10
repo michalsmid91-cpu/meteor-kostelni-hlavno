@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zápasy — SK Meteor Kostelní Hlavno</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue: #1a6bb5;
+    --blue-dark: #0d3d6e;
+    --blue-mid: #1558a0;
+    --blue-light: #e6f1fb;
+    --navy: #0d1b2e;
+    --navy-mid: #132540;
+    --gold: #f0a500;
+    --gold-light: #fff8e6;
+    --white: #ffffff;
+    --gray-50: #f7f8fa;
+    --gray-100: #f0f2f5;
+    --gray-200: #e0e4ea;
+    --gray-400: #8a94a6;
+    --gray-600: #556070;
+    --gray-800: #2a3040;
+    --green: #22a05a;
+    --green-light: #e6f7ee;
+    --red: #d63b3b;
+    --red-light: #fde8e8;
+    --yellow: #e8a020;
+    --yellow-light: #fef3e2;
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 14px;
+    --radius-xl: 20px;
+    --shadow-sm: 0 1px 4px rgba(13,27,46,0.08);
+    --shadow-md: 0 4px 20px rgba(13,27,46,0.12);
+    --shadow-lg: 0 12px 40px rgba(13,27,46,0.18);
+  }
+
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Barlow', sans-serif; color: var(--gray-800); background: var(--white); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+  /* ─── NAV ─── */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(13,27,46,0.96); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 0 5%; display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .nav-brand { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+  .nav-crest { width: 38px; height: 38px; border-radius: 50%; background: var(--blue); display: flex; align-items: center; justify-content: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 0.9rem; color: var(--white); flex-shrink: 0; border: 2px solid rgba(255,255,255,0.15); }
+  .nav-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1rem; color: var(--white); line-height: 1.1; }
+  .nav-name span { display: block; font-size: 0.7rem; font-weight: 400; color: rgba(255,255,255,0.45); letter-spacing: 0.06em; text-transform: uppercase; }
+  .nav-links { display: flex; align-items: center; gap: 1.75rem; list-style: none; }
+  .nav-links a { text-decoration: none; font-size: 0.875rem; font-weight: 500; color: rgba(255,255,255,0.6); transition: color 0.2s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--white); }
+  .nav-cta { background: var(--gold); color: var(--navy) !important; padding: 0.5rem 1.1rem; border-radius: var(--radius-md); font-weight: 600 !important; font-size: 0.825rem !important; }
+  .nav-cta:hover { background: #e09800 !important; }
+  .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+  .nav-hamburger span { width: 22px; height: 2px; background: var(--white); border-radius: 2px; display: block; }
+
+  /* ─── PAGE HEADER ─── */
+  .page-header { background: var(--navy); padding: 110px 5% 70px; position: relative; overflow: hidden; }
+  .page-header::before { content: ''; position: absolute; top: -100px; right: -100px; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(26,107,181,0.25) 0%, transparent 70%); }
+  .page-header-inner { position: relative; z-index: 2; }
+  .page-eyebrow { font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 0.5rem; }
+  .page-header h1 { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(2.5rem, 5vw, 4rem); color: var(--white); line-height: 1.0; font-weight: 800; text-transform: uppercase; margin-bottom: 0.85rem; }
+  .page-header p { font-size: 1rem; color: rgba(255,255,255,0.5); max-width: 520px; }
+
+  /* ─── TABS ─── */
+  .tabs-bar { background: var(--white); border-bottom: 2px solid var(--gray-100); position: sticky; top: 64px; z-index: 90; padding: 0 5%; }
+  .tabs-inner { display: flex; }
+  .tab-btn { padding: 1rem 1.5rem; font-family: 'Barlow Condensed', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.06em; border: none; background: transparent; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: color 0.2s, border-color 0.2s; }
+  .tab-btn:hover { color: var(--blue); }
+  .tab-btn.active { color: var(--blue); border-bottom-color: var(--blue); }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* ─── SECTIONS ─── */
+  .section { padding: 60px 5%; }
+  .section-alt { background: var(--gray-50); }
+  .section-dark { background: var(--navy); }
+
+  .section-eyebrow { font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 0.5rem; }
+  .section-title { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(1.8rem, 3vw, 2.8rem); color: var(--gray-800); line-height: 1.05; font-weight: 800; text-transform: uppercase; margin-bottom: 1rem; }
+  .section-title.light { color: var(--white); }
+  .section-header { margin-bottom: 2rem; }
+  .section-header-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+
+  /* ─── FILTR ─── */
+  .filter-bar { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .filter-btn { background: var(--gray-100); border: 1px solid var(--gray-200); color: var(--gray-600); padding: 0.4rem 0.9rem; border-radius: 20px; font-size: 0.8rem; font-weight: 500; cursor: pointer; font-family: 'Barlow', sans-serif; transition: all 0.2s; }
+  .filter-btn:hover { border-color: var(--blue); color: var(--blue); }
+  .filter-btn.active { background: var(--blue); color: var(--white); border-color: var(--blue); }
+
+  /* ─── PROGRAM ─── */
+  .match-list { display: flex; flex-direction: column; gap: 0.75rem; }
+
+  .match-row {
+    background: var(--white); border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg); padding: 1.1rem 1.5rem;
+    display: grid; grid-template-columns: 120px 1fr auto;
+    gap: 1.5rem; align-items: center;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+
+  .match-row:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+
+  .match-row.home { border-left: 4px solid var(--blue); }
+  .match-row.away { border-left: 4px solid var(--gray-300); }
+
+  .match-date-col { text-align: center; }
+  .match-day { font-family: 'Barlow Condensed', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--gray-800); line-height: 1; }
+  .match-month { font-size: 0.7rem; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.06em; }
+  .match-time { font-size: 0.875rem; font-weight: 600; color: var(--blue); margin-top: 0.2rem; }
+
+  .match-info-col { }
+  .match-teams-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.3rem; }
+  .match-home-team { font-family: 'Barlow Condensed', sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--gray-800); text-transform: uppercase; }
+  .match-vs { font-size: 0.75rem; color: var(--gray-400); font-weight: 500; }
+  .match-away-team { font-family: 'Barlow Condensed', sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--gray-800); text-transform: uppercase; }
+  .match-meta-row { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+  .match-meta-item { font-size: 0.775rem; color: var(--gray-400); display: flex; align-items: center; gap: 0.3rem; }
+  .match-type-badge { font-size: 0.65rem; font-weight: 700; font-family: 'Barlow Condensed', sans-serif; padding: 2px 7px; border-radius: 3px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .match-type-badge.home { background: var(--blue-light); color: var(--blue); }
+  .match-type-badge.away { background: var(--gray-100); color: var(--gray-600); }
+
+  .match-action-col { display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem; }
+  .btn-map { display: inline-block; background: var(--gray-100); color: var(--gray-600); padding: 0.45rem 0.9rem; border-radius: var(--radius-md); font-size: 0.775rem; font-weight: 500; text-decoration: none; transition: background 0.2s, color 0.2s; white-space: nowrap; }
+  .btn-map:hover { background: var(--blue-light); color: var(--blue); }
+
+  /* ─── VÝSLEDKY ─── */
+  .result-row {
+    background: var(--white); border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg); overflow: hidden;
+    margin-bottom: 0.75rem; transition: box-shadow 0.2s;
+  }
+
+  .result-row:hover { box-shadow: var(--shadow-sm); }
+
+  .result-header {
+    padding: 1rem 1.5rem;
+    display: grid; grid-template-columns: 120px 1fr auto;
+    gap: 1.5rem; align-items: center;
+    cursor: pointer; user-select: none;
+  }
+
+  .result-indicator { width: 4px; border-radius: 2px; height: 100%; position: absolute; left: 0; top: 0; }
+
+  .result-row.win { border-left: 4px solid var(--green); }
+  .result-row.draw { border-left: 4px solid var(--yellow); }
+  .result-row.loss { border-left: 4px solid var(--red); }
+
+  .result-score { font-family: 'Barlow Condensed', sans-serif; font-size: 1.8rem; font-weight: 800; line-height: 1; text-align: center; }
+  .result-row.win .result-score { color: var(--green); }
+  .result-row.draw .result-score { color: var(--yellow); }
+  .result-row.loss .result-score { color: var(--red); }
+
+  .result-badge { font-size: 0.6rem; font-weight: 700; font-family: 'Barlow Condensed', sans-serif; padding: 2px 6px; border-radius: 3px; text-transform: uppercase; letter-spacing: 0.05em; display: inline-block; margin-top: 0.2rem; }
+  .result-row.win .result-badge { background: var(--green-light); color: var(--green); }
+  .result-row.draw .result-badge { background: var(--yellow-light); color: var(--yellow); }
+  .result-row.loss .result-badge { background: var(--red-light); color: var(--red); }
+
+  .result-expand { width: 24px; height: 24px; border-radius: 50%; background: var(--gray-100); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: var(--gray-400); transition: transform 0.25s, background 0.2s; flex-shrink: 0; }
+  .result-row.open .result-expand { transform: rotate(180deg); background: var(--blue-light); color: var(--blue); }
+
+  .result-detail { display: none; padding: 0 1.5rem 1.25rem; border-top: 1px solid var(--gray-100); }
+  .result-row.open .result-detail { display: block; }
+
+  .result-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem; }
+  .result-detail-label { font-size: 0.7rem; font-weight: 700; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; font-family: 'Barlow Condensed', sans-serif; }
+  .goal-item { display: flex; gap: 0.5rem; align-items: center; font-size: 0.85rem; color: var(--gray-600); margin-bottom: 0.3rem; }
+  .goal-min { font-weight: 600; color: var(--blue); min-width: 28px; font-family: 'Barlow Condensed', sans-serif; }
+  .card-item { display: flex; gap: 0.5rem; align-items: center; font-size: 0.85rem; color: var(--gray-600); margin-bottom: 0.3rem; }
+  .card-yellow { width: 10px; height: 14px; background: var(--yellow); border-radius: 1px; flex-shrink: 0; }
+  .card-red { width: 10px; height: 14px; background: var(--red); border-radius: 1px; flex-shrink: 0; }
+  .lineup-grid { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .lineup-player { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius-sm); padding: 0.3rem 0.6rem; font-size: 0.775rem; color: var(--gray-600); }
+  .lineup-player.scorer { background: var(--green-light); border-color: var(--green); color: var(--green); }
+
+  /* ─── TABULKA ─── */
+  .table-wrap { overflow-x: auto; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); }
+  table { width: 100%; border-collapse: collapse; background: var(--white); }
+  thead tr { background: var(--navy); }
+  thead th { padding: 0.85rem 1rem; font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem; font-weight: 700; color: rgba(255,255,255,0.6); text-align: left; text-transform: uppercase; letter-spacing: 0.08em; }
+  thead th:not(:first-child):not(:nth-child(2)) { text-align: center; }
+  tbody tr { border-bottom: 1px solid var(--gray-100); transition: background 0.15s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--gray-50); }
+  tbody tr.meteor { background: var(--blue-light); }
+  tbody tr.meteor:hover { background: #d6e9f8; }
+  tbody td { padding: 0.8rem 1rem; font-size: 0.875rem; color: var(--gray-600); }
+  tbody td:not(:first-child):not(:nth-child(2)) { text-align: center; }
+  .rank { font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 700; color: var(--gray-400); }
+  .team-cell { font-weight: 600; color: var(--gray-800); }
+  .meteor .team-cell { color: var(--blue-dark); font-weight: 700; }
+  .points { font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 800; color: var(--navy); }
+  .meteor .points { color: var(--blue); }
+  .meteor-badge { display: inline-block; background: var(--blue); color: var(--white); font-size: 0.6rem; font-weight: 700; font-family: 'Barlow Condensed', sans-serif; padding: 1px 5px; border-radius: 3px; margin-left: 6px; text-transform: uppercase; letter-spacing: 0.05em; vertical-align: middle; }
+  .form-dots { display: flex; gap: 3px; justify-content: center; }
+  .form-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .form-dot.w { background: var(--green); }
+  .form-dot.d { background: var(--yellow); }
+  .form-dot.l { background: var(--red); }
+
+  /* archiv */
+  .season-select { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; }
+  .season-btn { padding: 0.4rem 0.9rem; border-radius: 20px; font-size: 0.8rem; font-weight: 500; cursor: pointer; border: 1px solid var(--gray-200); background: var(--white); color: var(--gray-600); font-family: 'Barlow', sans-serif; transition: all 0.2s; }
+  .season-btn.active { background: var(--navy); color: var(--white); border-color: var(--navy); }
+
+  /* ─── CTA ─── */
+  .fb-cta { background: var(--navy); border-radius: var(--radius-xl); padding: 2rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; margin-top: 2rem; }
+  .fb-cta p { font-size: 0.95rem; color: rgba(255,255,255,0.6); }
+  .fb-cta h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 1.4rem; font-weight: 800; color: var(--white); text-transform: uppercase; margin-bottom: 0.3rem; }
+  .btn-gold { display: inline-block; background: var(--gold); color: var(--navy); padding: 0.75rem 1.5rem; border-radius: var(--radius-md); font-size: 0.875rem; font-weight: 600; text-decoration: none; transition: background 0.2s; border: none; cursor: pointer; font-family: 'Barlow', sans-serif; }
+  .btn-gold:hover { background: #e09800; }
+
+  /* ─── FOOTER ─── */
+  footer { background: #070f1a; padding: 3rem 5% 1.5rem; }
+  .footer-inner { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 2.5rem; padding-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .footer-brand-name { font-family: 'Barlow Condensed', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--white); text-transform: uppercase; margin-bottom: 0.6rem; }
+  .footer-brand p { font-size: 0.825rem; color: rgba(255,255,255,0.35); line-height: 1.7; max-width: 240px; }
+  .footer-social { display: flex; gap: 0.6rem; margin-top: 1.25rem; }
+  .footer-social a { width: 32px; height: 32px; border-radius: var(--radius-sm); background: rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.4); text-decoration: none; font-size: 0.75rem; font-weight: 700; font-family: 'Barlow Condensed', sans-serif; transition: background 0.2s, color 0.2s; }
+  .footer-social a:hover { background: var(--blue); color: var(--white); }
+  .footer-col h4 { font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; font-weight: 700; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; }
+  .footer-col a { display: block; font-size: 0.85rem; color: rgba(255,255,255,0.5); text-decoration: none; margin-bottom: 0.5rem; transition: color 0.2s; }
+  .footer-col a:hover { color: var(--white); }
+  .footer-bottom { display: flex; justify-content: space-between; align-items: center; font-size: 0.775rem; color: rgba(255,255,255,0.2); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    nav { padding: 0 1.25rem; }
+    .nav-links { display: none; }
+    .nav-hamburger { display: flex; }
+    .page-header { padding: 90px 1.25rem 50px; }
+    .section { padding: 50px 1.25rem; }
+    .match-row { grid-template-columns: 80px 1fr; gap: 1rem; }
+    .match-action-col { display: none; }
+    .result-header { grid-template-columns: 80px 1fr auto; gap: 1rem; }
+    .result-detail-grid { grid-template-columns: 1fr; }
+    .fb-cta { flex-direction: column; }
+    .footer-inner { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+  }
+
+  @media (max-width: 480px) {
+    .footer-inner { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="meteor-homepage.html" class="nav-brand">
+    <div class="nav-crest">SKM</div>
+    <div class="nav-name">SK Meteor<span>Kostelní Hlavno</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="meteor-tym.html">Tým</a></li>
+    <li><a href="meteor-zapasy.html" class="active">Zápasy</a></li>
+    <li><a href="meteor-klub.html">Klub</a></li>
+    <li><a href="meteor-kontakt.html">Kontakt & Merch</a></li>
+    <li><a href="meteor-kontakt.html" class="nav-cta">Přijď hrát s námi</a></li>
+  </ul>
+  <div class="nav-hamburger"><span></span><span></span><span></span></div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-eyebrow">Mladoboleslavský okresní přebor · 2024/2025</div>
+    <h1>Program & Výsledky</h1>
+    <p>Sledujte program nadcházejících zápasů, výsledky a aktuální tabulku přeboru.</p>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-bar">
+  <div class="tabs-inner">
+    <button class="tab-btn active" onclick="switchTab('program')">Muži — Program</button>
+    <button class="tab-btn" onclick="switchTab('vysledky')">Muži — Výsledky</button>
+    <button class="tab-btn" onclick="switchTab('tabulka')">Tabulka</button>
+    <button class="tab-btn" onclick="switchTab('starsi-program')">St. přípravka</button>
+    <button class="tab-btn" onclick="switchTab('mladsi-program')">Ml. přípravka</button>
+  </div>
+</div>
+
+<!-- PROGRAM -->
+<div class="tab-content active" id="tab-program">
+  <section class="section">
+    <div class="section-header-row">
+      <div>
+        <div class="section-eyebrow">Nadcházející zápasy</div>
+        <h2 class="section-title">Program</h2>
+      </div>
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterMatches(this,'all')">Všechny</button>
+        <button class="filter-btn" onclick="filterMatches(this,'home')">Domácí</button>
+        <button class="filter-btn" onclick="filterMatches(this,'away')">Venkovní</button>
+      </div>
+    </div>
+
+    <div class="match-list" id="programList">
+
+      <div class="match-row home" data-type="home">
+        <div class="match-date-col">
+          <div class="match-day">25</div>
+          <div class="match-month">Května</div>
+          <div class="match-time">16:00</div>
+        </div>
+        <div class="match-info-col">
+          <div class="match-teams-row">
+            <div class="match-home-team">Meteor K.H.</div>
+            <div class="match-vs">vs</div>
+            <div class="match-away-team">TJ Benátky n.J.</div>
+          </div>
+          <div class="match-meta-row">
+            <span class="match-type-badge home">🏠 Domácí</span>
+            <span class="match-meta-item">📍 Hřiště SK Meteor, Kostelní Hlavno</span>
+            <span class="match-meta-item">⚽ Mladoboleslavský OP</span>
+          </div>
+        </div>
+        <div class="match-action-col">
+          <a href="#" class="btn-map">📍 Jak se tam dostat</a>
+        </div>
+      </div>
+
+      <div class="match-row away" data-type="away">
+        <div class="match-date-col">
+          <div class="match-day">1</div>
+          <div class="match-month">Června</div>
+          <div class="match-time">17:00</div>
+        </div>
+        <div class="match-info-col">
+          <div class="match-teams-row">
+            <div class="match-home-team">FK Bezno</div>
+            <div class="match-vs">vs</div>
+            <div class="match-away-team">Meteor K.H.</div>
+          </div>
+          <div class="match-meta-row">
+            <span class="match-type-badge away">✈️ Venkovní</span>
+            <span class="match-meta-item">📍 Bezno</span>
+            <span class="match-meta-item">⚽ Mladoboleslavský OP</span>
+          </div>
+        </div>
+        <div class="match-action-col">
+          <a href="#" class="btn-map">📍 Jak se tam dostat</a>
+        </div>
+      </div>
+
+      <div class="match-row home" data-type="home">
+        <div class="match-date-col">
+          <div class="match-day">8</div>
+          <div class="match-month">Června</div>
+          <div class="match-time">16:00</div>
+        </div>
+        <div class="match-info-col">
+          <div class="match-teams-row">
+            <div class="match-home-team">Meteor K.H.</div>
+            <div class="match-vs">vs</div>
+            <div class="match-away-team">Sokol Jizerní Vtelno</div>
+          </div>
+          <div class="match-meta-row">
+            <span class="match-type-badge home">🏠 Domácí</span>
+            <span class="match-meta-item">📍 Hřiště SK Meteor, Kostelní Hlavno</span>
+            <span class="match-meta-item">⚽ Mladoboleslavský OP</span>
+          </div>
+        </div>
+        <div class="match-action-col">
+          <a href="#" class="btn-map">📍 Jak se tam dostat</a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="fb-cta">
+      <div>
+        <h3>Sledujte nás na Facebooku</h3>
+        <p>Novinky, změny termínů a fotky ze zápasů — jako první.</p>
+      </div>
+      <a href="#" class="btn-gold">Přejít na Facebook →</a>
+    </div>
+  </section>
+</div>
+
+<!-- VÝSLEDKY -->
+<div class="tab-content" id="tab-vysledky">
+  <section class="section">
+    <div class="section-header-row">
+      <div>
+        <div class="section-eyebrow">Odehrané zápasy</div>
+        <h2 class="section-title">Výsledky</h2>
+      </div>
+      <div class="season-select">
+        <button class="season-btn active">2024/2025</button>
+        <button class="season-btn">2023/2024</button>
+        <button class="season-btn">2022/2023</button>
+      </div>
+    </div>
+
+    <div class="match-list">
+
+      <div class="result-row win">
+        <div class="result-header" onclick="toggleResult(this)">
+          <div style="text-align:center;">
+            <div class="result-score">3 : 1</div>
+            <div class="result-badge">Výhra</div>
+          </div>
+          <div class="match-info-col">
+            <div class="match-teams-row">
+              <div class="match-home-team">Meteor K.H.</div>
+              <div class="match-vs">—</div>
+              <div class="match-away-team">Sokol Lysá</div>
+            </div>
+            <div class="match-meta-row">
+              <span class="match-type-badge home">🏠 Domácí</span>
+              <span class="match-meta-item">So 18. 5. 2025</span>
+            </div>
+          </div>
+          <div class="result-expand">▼</div>
+        </div>
+        <div class="result-detail">
+          <div class="result-detail-grid">
+            <div>
+              <div class="result-detail-label">Střelci gólů</div>
+              <div class="goal-item"><span class="goal-min">23'</span> Jan Novák</div>
+              <div class="goal-item"><span class="goal-min">61'</span> Jan Novák</div>
+              <div class="goal-item"><span class="goal-min">78'</span> Petr Svoboda</div>
+            </div>
+            <div>
+              <div class="result-detail-label">Karty</div>
+              <div class="card-item"><div class="card-yellow"></div> Marek Kovář (45')</div>
+            </div>
+          </div>
+          <div style="margin-top:1.25rem;">
+            <div class="result-detail-label">Sestava</div>
+            <div class="lineup-grid" style="margin-top:0.5rem;">
+              <div class="lineup-player">[Brankář]</div>
+              <div class="lineup-player">[Obránce]</div>
+              <div class="lineup-player">[Obránce]</div>
+              <div class="lineup-player">[Obránce]</div>
+              <div class="lineup-player">[Obránce]</div>
+              <div class="lineup-player">[Záložník]</div>
+              <div class="lineup-player">[Záložník]</div>
+              <div class="lineup-player scorer">Jan Novák ⚽⚽</div>
+              <div class="lineup-player">[Záložník]</div>
+              <div class="lineup-player scorer">Petr Svoboda ⚽</div>
+              <div class="lineup-player">[Útočník]</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-row loss">
+        <div class="result-header" onclick="toggleResult(this)">
+          <div style="text-align:center;">
+            <div class="result-score">1 : 2</div>
+            <div class="result-badge">Prohra</div>
+          </div>
+          <div class="match-info-col">
+            <div class="match-teams-row">
+              <div class="match-home-team">TJ Bezno</div>
+              <div class="match-vs">—</div>
+              <div class="match-away-team">Meteor K.H.</div>
+            </div>
+            <div class="match-meta-row">
+              <span class="match-type-badge away">✈️ Venkovní</span>
+              <span class="match-meta-item">So 11. 5. 2025</span>
+            </div>
+          </div>
+          <div class="result-expand">▼</div>
+        </div>
+        <div class="result-detail">
+          <div class="result-detail-grid">
+            <div>
+              <div class="result-detail-label">Střelci gólů</div>
+              <div class="goal-item"><span class="goal-min">55'</span> [Jméno hráče]</div>
+            </div>
+            <div>
+              <div class="result-detail-label">Karty</div>
+              <div class="card-item"><div class="card-yellow"></div> [Jméno hráče] (72')</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-row draw">
+        <div class="result-header" onclick="toggleResult(this)">
+          <div style="text-align:center;">
+            <div class="result-score">2 : 2</div>
+            <div class="result-badge">Remíza</div>
+          </div>
+          <div class="match-info-col">
+            <div class="match-teams-row">
+              <div class="match-home-team">Meteor K.H.</div>
+              <div class="match-vs">—</div>
+              <div class="match-away-team">Tatran M. Vtelno</div>
+            </div>
+            <div class="match-meta-row">
+              <span class="match-type-badge home">🏠 Domácí</span>
+              <span class="match-meta-item">So 4. 5. 2025</span>
+            </div>
+          </div>
+          <div class="result-expand">▼</div>
+        </div>
+        <div class="result-detail">
+          <div class="result-detail-grid">
+            <div>
+              <div class="result-detail-label">Střelci gólů</div>
+              <div class="goal-item"><span class="goal-min">12'</span> [Jméno hráče]</div>
+              <div class="goal-item"><span class="goal-min">67'</span> [Jméno hráče]</div>
+            </div>
+            <div>
+              <div class="result-detail-label">Karty</div>
+              <p style="font-size:0.825rem;color:var(--gray-400);">Žádné karty</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-row win">
+        <div class="result-header" onclick="toggleResult(this)">
+          <div style="text-align:center;">
+            <div class="result-score">4 : 0</div>
+            <div class="result-badge">Výhra</div>
+          </div>
+          <div class="match-info-col">
+            <div class="match-teams-row">
+              <div class="match-home-team">Meteor K.H.</div>
+              <div class="match-vs">—</div>
+              <div class="match-away-team">FK Jabkenice</div>
+            </div>
+            <div class="match-meta-row">
+              <span class="match-type-badge home">🏠 Domácí</span>
+              <span class="match-meta-item">So 27. 4. 2025</span>
+            </div>
+          </div>
+          <div class="result-expand">▼</div>
+        </div>
+        <div class="result-detail">
+          <div class="result-detail-grid">
+            <div>
+              <div class="result-detail-label">Střelci gólů</div>
+              <div class="goal-item"><span class="goal-min">8'</span> [Jméno]</div>
+              <div class="goal-item"><span class="goal-min">34'</span> [Jméno]</div>
+              <div class="goal-item"><span class="goal-min">58'</span> [Jméno]</div>
+              <div class="goal-item"><span class="goal-min">82'</span> [Jméno]</div>
+            </div>
+            <div>
+              <div class="result-detail-label">Karty</div>
+              <p style="font-size:0.825rem;color:var(--gray-400);">Žádné karty</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<!-- TABULKA -->
+<div class="tab-content" id="tab-tabulka">
+  <section class="section">
+    <div class="section-header-row">
+      <div>
+        <div class="section-eyebrow">Mladoboleslavský okresní přebor</div>
+        <h2 class="section-title">Tabulka</h2>
+      </div>
+      <div class="season-select">
+        <button class="season-btn active">2024/2025</button>
+        <button class="season-btn">2023/2024</button>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:40px;">#</th>
+            <th>Tým</th>
+            <th>Z</th>
+            <th>V</th>
+            <th>R</th>
+            <th>P</th>
+            <th>Skóre</th>
+            <th>Body</th>
+            <th>Forma</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="rank">1.</span></td>
+            <td><span class="team-cell">TJ Sokol Jizerní Vtelno</span></td>
+            <td>22</td><td>16</td><td>3</td><td>3</td><td>58:24</td>
+            <td><span class="points">51</span></td>
+            <td><div class="form-dots"><div class="form-dot w"></div><div class="form-dot w"></div><div class="form-dot d"></div><div class="form-dot w"></div><div class="form-dot w"></div></div></td>
+          </tr>
+          <tr>
+            <td><span class="rank">2.</span></td>
+            <td><span class="team-cell">FK Bezno</span></td>
+            <td>22</td><td>14</td><td>4</td><td>4</td><td>52:28</td>
+            <td><span class="points">46</span></td>
+            <td><div class="form-dots"><div class="form-dot w"></div><div class="form-dot l"></div><div class="form-dot w"></div><div class="form-dot w"></div><div class="form-dot d"></div></div></td>
+          </tr>
+          <tr class="meteor">
+            <td><span class="rank" style="color:var(--blue);">3.</span></td>
+            <td><span class="team-cell">SK Meteor K.H.<span class="meteor-badge">My</span></span></td>
+            <td>22</td><td>12</td><td>5</td><td>5</td><td>44:32</td>
+            <td><span class="points">41</span></td>
+            <td><div class="form-dots"><div class="form-dot w"></div><div class="form-dot l"></div><div class="form-dot d"></div><div class="form-dot w"></div><div class="form-dot w"></div></div></td>
+          </tr>
+          <tr>
+            <td><span class="rank">4.</span></td>
+            <td><span class="team-cell">TJ Tatran Mělnické Vtelno</span></td>
+            <td>22</td><td>11</td><td>4</td><td>7</td><td>38:36</td>
+            <td><span class="points">37</span></td>
+            <td><div class="form-dots"><div class="form-dot d"></div><div class="form-dot w"></div><div class="form-dot l"></div><div class="form-dot w"></div><div class="form-dot l"></div></div></td>
+          </tr>
+          <tr>
+            <td><span class="rank">5.</span></td>
+            <td><span class="team-cell">Sokol Lysá nad Labem B</span></td>
+            <td>22</td><td>9</td><td>5</td><td>8</td><td>35:40</td>
+            <td><span class="points">32</span></td>
+            <td><div class="form-dots"><div class="form-dot l"></div><div class="form-dot w"></div><div class="form-dot d"></div><div class="form-dot l"></div><div class="form-dot w"></div></div></td>
+          </tr>
+          <tr>
+            <td><span class="rank">6.</span></td>
+            <td><span class="team-cell">FK Jabkenice</span></td>
+            <td>22</td><td>8</td><td>4</td><td>10</td><td>30:42</td>
+            <td><span class="points">28</span></td>
+            <td><div class="form-dots"><div class="form-dot l"></div><div class="form-dot l"></div><div class="form-dot w"></div><div class="form-dot d"></div><div class="form-dot l"></div></div></td>
+          </tr>
+          <tr>
+            <td><span class="rank">7.</span></td>
+            <td><span class="team-cell">TJ Benátky nad Jizerou B</span></td>
+            <td>22</td><td>6</td><td>5</td><td>11</td><td>28:46</td>
+            <td><span class="points">23</span></td>
+            <td><div class="form-dots"><div class="form-dot l"></div><div class="form-dot d"></div><div class="form-dot l"></div><div class="form-dot w"></div><div class="form-dot l"></div></div></td>
+          </tr>
+          <tr>
+            <td><span class="rank">8.</span></td>
+            <td><span class="team-cell">SK Kosmonosy B</span></td>
+            <td>22</td><td>5</td><td>3</td><td>14</td><td>24:52</td>
+            <td><span class="points">18</span></td>
+            <td><div class="form-dots"><div class="form-dot l"></div><div class="form-dot l"></div><div class="form-dot l"></div><div class="form-dot w"></div><div class="form-dot l"></div></div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:0.775rem;color:var(--gray-400);margin-top:0.85rem;text-align:center;">Tabulka je ilustrační — aktualizujte ji ručně po každém kole.</p>
+
+    <div class="fb-cta" style="margin-top:2rem;">
+      <div>
+        <h3>Živé výsledky na Facebooku</h3>
+        <p>Výsledky zápasů průběžně sdílíme na naší stránce.</p>
+      </div>
+      <a href="#" class="btn-gold">Přejít na Facebook →</a>
+    </div>
+  </section>
+</div>
+
+<!-- STARŠÍ PŘÍPRAVKA -->
+<div class="tab-content" id="tab-starsi-program">
+  <section class="section">
+    <div class="section-header-row">
+      <div>
+        <div class="section-eyebrow">Starší přípravka</div>
+        <h2 class="section-title">Program & Výsledky</h2>
+      </div>
+    </div>
+
+    <div style="margin-bottom:2.5rem;">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.75rem;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:2px solid var(--gray-100);">Nadcházející zápasy</div>
+      <div class="match-list">
+        <div class="match-row home" data-type="home">
+          <div class="match-date-col">
+            <div class="match-day">26</div>
+            <div class="match-month">Května</div>
+            <div class="match-time">10:00</div>
+          </div>
+          <div class="match-info-col">
+            <div class="match-teams-row">
+              <div class="match-home-team">Meteor K.H.</div>
+              <div class="match-vs">vs</div>
+              <div class="match-away-team">[Soupeř]</div>
+            </div>
+            <div class="match-meta-row">
+              <span class="match-type-badge home">🏠 Domácí</span>
+              <span class="match-meta-item">📍 Hřiště SK Meteor</span>
+              <span class="match-meta-item">⚽ Starší přípravka</span>
+            </div>
+          </div>
+          <div class="match-action-col">
+            <a href="#" class="btn-map">📍 Jak se tam dostat</a>
+          </div>
+        </div>
+        <div class="match-row away" data-type="away">
+          <div class="match-date-col">
+            <div class="match-day">2</div>
+            <div class="match-month">Června</div>
+            <div class="match-time">10:00</div>
+          </div>
+          <div class="match-info-col">
+            <div class="match-teams-row">
+              <div class="match-home-team">[Soupeř]</div>
+              <div class="match-vs">vs</div>
+              <div class="match-away-team">Meteor K.H.</div>
+            </div>
+            <div class="match-meta-row">
+              <span class="match-type-badge away">✈️ Venkovní</span>
+              <span class="match-meta-item">⚽ Starší přípravka</span>
+            </div>
+          </div>
+          <div class="match-action-col">
+            <a href="#" class="btn-map">📍 Jak se tam dostat</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.75rem;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:2px solid var(--gray-100);">Poslední výsledky</div>
+      <div class="match-list">
+        <div class="result-row win">
+          <div class="result-header" onclick="toggleResult(this)">
+            <div style="text-align:center;">
+              <div class="result-score">4 : 1</div>
+              <div class="result-badge">Výhra</div>
+            </div>
+            <div class="match-info-col">
+              <div class="match-teams-row">
+                <div class="match-home-team">Meteor K.H.</div>
+                <div class="match-vs">—</div>
+                <div class="match-away-team">[Soupeř]</div>
+              </div>
+              <div class="match-meta-row">
+                <span class="match-type-badge home">🏠 Domácí</span>
+                <span class="match-meta-item">[Datum]</span>
+              </div>
+            </div>
+            <div class="result-expand">▼</div>
+          </div>
+          <div class="result-detail">
+            <div class="result-detail-label">Střelci gólů</div>
+            <div class="goal-item"><span class="goal-min">—</span> [Jméno hráče]</div>
+            <div class="goal-item"><span class="goal-min">—</span> [Jméno hráče]</div>
+          </div>
+        </div>
+        <div class="result-row loss">
+          <div class="result-header" onclick="toggleResult(this)">
+            <div style="text-align:center;">
+              <div class="result-score">0 : 2</div>
+              <div class="result-badge">Prohra</div>
+            </div>
+            <div class="match-info-col">
+              <div class="match-teams-row">
+                <div class="match-home-team">[Soupeř]</div>
+                <div class="match-vs">—</div>
+                <div class="match-away-team">Meteor K.H.</div>
+              </div>
+              <div class="match-meta-row">
+                <span class="match-type-badge away">✈️ Venkovní</span>
+                <span class="match-meta-item">[Datum]</span>
+              </div>
+            </div>
+            <div class="result-expand">▼</div>
+          </div>
+          <div class="result-detail">
+            <p style="font-size:0.85rem;color:var(--gray-400);">Doplňte detail zápasu.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fb-cta">
+      <div>
+        <h3>Sledujte přípravku na Facebooku</h3>
+        <p>Výsledky a fotky z dětských zápasů průběžně sdílíme.</p>
+      </div>
+      <a href="#" class="btn-gold">Přejít na Facebook →</a>
+    </div>
+  </section>
+</div>
+
+<!-- MLADŠÍ PŘÍPRAVKA -->
+<div class="tab-content" id="tab-mladsi-program">
+  <section class="section">
+    <div class="section-header-row">
+      <div>
+        <div class="section-eyebrow">Mladší přípravka</div>
+        <h2 class="section-title">Program & Výsledky</h2>
+      </div>
+    </div>
+
+    <div style="margin-bottom:2.5rem;">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.75rem;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:2px solid var(--gray-100);">Nadcházející zápasy</div>
+      <div class="match-list">
+        <div class="match-row home" data-type="home">
+          <div class="match-date-col">
+            <div class="match-day">26</div>
+            <div class="match-month">Května</div>
+            <div class="match-time">11:30</div>
+          </div>
+          <div class="match-info-col">
+            <div class="match-teams-row">
+              <div class="match-home-team">Meteor K.H.</div>
+              <div class="match-vs">vs</div>
+              <div class="match-away-team">[Soupeř]</div>
+            </div>
+            <div class="match-meta-row">
+              <span class="match-type-badge home">🏠 Domácí</span>
+              <span class="match-meta-item">📍 Hřiště SK Meteor</span>
+              <span class="match-meta-item">⚽ Mladší přípravka</span>
+            </div>
+          </div>
+          <div class="match-action-col">
+            <a href="#" class="btn-map">📍 Jak se tam dostat</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.75rem;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:2px solid var(--gray-100);">Poslední výsledky</div>
+      <div class="match-list">
+        <div class="result-row win">
+          <div class="result-header" onclick="toggleResult(this)">
+            <div style="text-align:center;">
+              <div class="result-score">3 : 0</div>
+              <div class="result-badge">Výhra</div>
+            </div>
+            <div class="match-info-col">
+              <div class="match-teams-row">
+                <div class="match-home-team">Meteor K.H.</div>
+                <div class="match-vs">—</div>
+                <div class="match-away-team">[Soupeř]</div>
+              </div>
+              <div class="match-meta-row">
+                <span class="match-type-badge home">🏠 Domácí</span>
+                <span class="match-meta-item">[Datum]</span>
+              </div>
+            </div>
+            <div class="result-expand">▼</div>
+          </div>
+          <div class="result-detail">
+            <div class="result-detail-label">Střelci gólů</div>
+            <div class="goal-item"><span class="goal-min">—</span> [Jméno hráče]</div>
+            <div class="goal-item"><span class="goal-min">—</span> [Jméno hráče]</div>
+            <div class="goal-item"><span class="goal-min">—</span> [Jméno hráče]</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fb-cta">
+      <div>
+        <h3>Sledujte přípravku na Facebooku</h3>
+        <p>Výsledky a fotky z dětských zápasů průběžně sdílíme.</p>
+      </div>
+      <a href="#" class="btn-gold">Přejít na Facebook →</a>
+    </div>
+  </section>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-brand-name">SK Meteor Kostelní Hlavno</div>
+      <p>Fotbalový klub hrající Mladoboleslavský okresní přebor. Muži a mládež.</p>
+      <div class="footer-social"><a href="#">FB</a></div>
+    </div>
+    <div class="footer-col">
+      <h4>Navigace</h4>
+      <a href="meteor-tym.html">Tým</a>
+      <a href="meteor-zapasy.html">Zápasy</a>
+      <a href="meteor-klub.html">Klub</a>
+      <a href="meteor-kontakt.html">Kontakt & Merch</a>
+    </div>
+    <div class="footer-col">
+      <h4>Zápasy</h4>
+      <a href="#" onclick="switchTab('program');return false;">Program</a>
+      <a href="#" onclick="switchTab('vysledky');return false;">Výsledky</a>
+      <a href="#" onclick="switchTab('tabulka');return false;">Tabulka</a>
+    </div>
+    <div class="footer-col">
+      <h4>Kontakt</h4>
+      <a href="#">[Telefon předsedy]</a>
+      <a href="#">Kostelní Hlavno</a>
+      <a href="meteor-kontakt.html">Napsat klubu</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 SK Meteor Kostelní Hlavno</span>
+    <span>Web vytvořen s láskou k fotbalu</span>
+  </div>
+</footer>
+
+<script>
+  function switchTab(id) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    const ids = ['program', 'vysledky', 'tabulka', 'starsi-program', 'mladsi-program'];
+    const idx = ids.indexOf(id);
+    if (idx !== -1) document.querySelectorAll('.tab-btn')[idx].classList.add('active');
+    const content = document.getElementById('tab-' + id);
+    if (content) {
+      content.classList.add('active');
+      window.scrollTo({ top: document.querySelector('.tabs-bar').offsetTop - 64, behavior: 'smooth' });
+    }
+  }
+
+  function toggleResult(header) {
+    const row = header.parentElement;
+    row.classList.toggle('open');
+  }
+
+  function filterMatches(btn, type) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('#programList .match-row').forEach(row => {
+      if (type === 'all' || row.dataset.type === type) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
